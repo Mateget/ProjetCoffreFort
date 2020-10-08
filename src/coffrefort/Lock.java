@@ -1,11 +1,11 @@
 package coffrefort;
 
 import java.awt.Color;
-import java.util.ArrayList;
 
 import javax.swing.JLabel;
 
 public class Lock extends JLabel implements Observer,Receiver{
+	private static final long serialVersionUID = 1L;
 	private boolean locked = true;
 	private int lockID;
 	private Observer observer;
@@ -35,9 +35,9 @@ public class Lock extends JLabel implements Observer,Receiver{
 	@Override
 	public void update(Object o) {
 		// TODO Auto-generated method stub
-		if (o instanceof Boutton) {
+		if (o instanceof Button) {
 			System.out.println(getText() +" Update");
-			Boutton boutton = (Boutton) o;
+			Button boutton = (Button) o;
 			for (int i = 0 ; i < boutton.getLockLinked().size() ; i++) {
 				System.out.println(getText()+" j'ai reçu Verroux "+boutton.getLockLinked().get(i));
 				if(boutton.getLockLinked().get(i).equals(this.lockID)) {

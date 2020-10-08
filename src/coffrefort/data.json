@@ -1,26 +1,78 @@
-
 {
-	"chests" : [
+	"chests": [
 		{
-			"name":"First",
-			"locks":{
-				[1,2],
-				[1,2,3],
-				[2,3]			
-			}
-		
+			"name": "Demo1",
+			"buttons": [
+				{
+					"locked" : true,
+					"linked" : [1,2]
+				},
+				{
+					"locked" : false,
+					"linked" : [1,2,3]
+				},
+				{
+					"locked" : true,
+					"linked" : [2,3]
+				}
+			]
+
 		},
 		{
-			"name":"Second",
-			"locks":{
-				[1,2,5],
-				[2,4,5],
-				[1,3,6],
-				[2,4],
-				[1,2,3,5],
-				[1,3,4,5,6]	
-			}
-			
-		}
+			"name": "Demo2",
+			"buttons": [
+				{
+					"locked" : false,
+					"linked" : [1,2,5]
+				},
+				{
+					"locked" : false,
+					"linked" : [2,4,5]
+				},
+				{
+					"locked" : false,
+					"linked" : [1,3,6]
+				},
+				{
+					"locked" : true,
+					"linked" : [2,4]
+				},
+				{
+					"locked" : false,
+					"linked" : [1,2,3,5]
+				},
+				{
+					"locked" : false,
+					"linked" : [1,3,4,5,6]
+				}
+			]
+
+		},
+		{
+			"name": "Test1",
+			"buttons": [
+				{
+					"locked" : true,
+					"linked" : [1,2]
+				},
+				{
+					"locked" : true,
+					"linked" : [1,2,3]
+				},
+				{
+					"locked" : true,
+					"linked" : [2,3,5]
+				},
+				{
+					"locked" : true,
+					"linked" : [4,5]
+				},
+				{
+					"locked" : true,
+					"linked" : [1,3,5]
+				}
+			]
+
+		},
 	]
 }

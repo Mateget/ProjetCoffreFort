@@ -6,14 +6,14 @@ import java.util.ArrayList;
 
 import javax.swing.JButton;
 
-public class Boutton extends JButton implements Receiver,Observer {
+public class Button extends JButton implements Receiver,Observer {
+	private static final long serialVersionUID = 1L;
 	private boolean pressed = false;
 	private ArrayList<Integer> lockLinked;
 	private ArrayList<Observer> observers;
 	private int bouttonID;
-	public Boutton(String str,ArrayList<Integer> lockLinked,ArrayList<Observer> observers, int bouttonID) {
+	public Button(String str,ArrayList<Integer> lockLinked, int bouttonID) {
 		this.bouttonID = bouttonID;
-		this.observers = observers;
 		this.lockLinked = lockLinked;
 		setText(str);
 		setEnabled(true);
@@ -30,6 +30,10 @@ public class Boutton extends JButton implements Receiver,Observer {
 	
 	public int getBouttonID() {
 		return bouttonID;
+	}
+
+	public void setObservers(ArrayList<Observer> observers) {
+		this.observers = observers;
 	}
 
 	public boolean isPressed() {

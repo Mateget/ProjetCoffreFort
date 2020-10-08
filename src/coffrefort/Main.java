@@ -8,7 +8,6 @@ public class Main {
 		// TODO Auto-generated method stub
 		Interface fenetre = new Interface("Hello");
 		fenetre.setVisible(true);
-
-	}
+		}
 
 }
