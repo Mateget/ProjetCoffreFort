@@ -73,6 +73,19 @@
 				}
 			]
 
+		}{
+			"name": "Coffre Test 2",
+			"buttons": [
+				{
+					"locked" : true,
+					"linked" : [1,2]
+				},
+				{
+					"locked" : true,
+					"linked" : [2]
+				}
+			]
+
 		},
 	]
 }

@@ -14,16 +14,24 @@ public class Button extends JButton{
 	
 	public void toggle() {
 		if(pressed) {
-			this.setEnabled(false);
-			this.pressed = false;
+			unpress();
 		}
 		else {
-			this.setEnabled(true);
-			this.pressed = true;
+			press();
 		}
 	}
 	
 	public boolean isPressed() {
 		return this.pressed;
 	}
+	
+	public void press() {
+		this.pressed = true;
+		this.setEnabled(true);
+	}
+	public void unpress() {
+		this.pressed = false;
+		this.setEnabled(false);
+	}
+	
 }

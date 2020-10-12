@@ -1,6 +1,7 @@
 package coffre;
 
 import java.awt.Color;
+import java.awt.Graphics;
 
 import javax.swing.JLabel;
 
@@ -16,17 +17,24 @@ public class Lock extends JLabel {
 	
 	public void toggle() {
 		if(locked) {
-			setForeground(Color.GREEN);
-			this.locked = false;
+			unlock();
 		}
 		else {
-			setForeground(Color.RED);
-			this.locked = true;
+			lock();
 		}
 	}
 	
 	public boolean isLocked() {
 		return this.locked;
+	}
+	
+	public void lock() {
+		setForeground(Color.RED);
+		this.locked = true;
+	}
+	public void unlock() {
+		setForeground(Color.GREEN);
+		this.locked = false;
 	}
 
 }

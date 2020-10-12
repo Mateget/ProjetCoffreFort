@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
@@ -28,6 +29,8 @@ public class ChestGenerator extends JPanel{
 	private JPanel gameInfo = new JPanel();
 	private JLabel clicCounter = new JLabel("0");
 	private JLabel temps = new JLabel("00:00");
+	private int currentState = 0;
+	private ArrayList<GameState> history = new ArrayList<GameState>();
 	public ChestGenerator(JSONArray objJSONArray) {
 		this.objJSONArray = objJSONArray;
 		this.lockNumber = this.objJSONArray.size();
@@ -37,11 +40,53 @@ public class ChestGenerator extends JPanel{
 		gameInfo.add(clicCounter);
 		gameInfo.add(new JLabel("Temps : "));
 		gameInfo.add(temps);
+		JButton undo = new JButton("Undo");
+		undo.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				loadSave(currentState);
+				
+			}
+		});
+		gameInfo.add(undo);
 		generateChest();
 		timer();
 	}
 	
-	public void generateChest() {
+	private void saveState() {
+		ArrayList<Boolean> list = new ArrayList<Boolean>(); 
+		for ( int i = 0 ; i < listLock.size() ; i ++) {
+			System.out.println("Add "+ listLock.get(i).getText() + " " + listLock.get(i).isLocked());
+			list.add(listLock.get(i).isLocked());
+		}
+		System.out.println(list);
+		history.add(new GameState(list));
+		System.out.println(history);
+	}
+	
+	private void loadSave(int saveValue) {
+		System.out.println("CurrentState : "+currentState);
+		if( currentState >= 0 ) {
+			GameState state = history.get(currentState);
+			history.remove(currentState);
+			System.out.println(history);
+			currentState--;
+			System.out.println("Load :" +state);
+			for ( int i = 0 ; i < lockNumber ; i++) {
+				if(state.get(i)) {
+					listLock.get(i).lock();
+					listButton.get(i).press();
+				} else {
+					listLock.get(i).unlock();
+					listButton.get(i).unpress();
+				}
+					
+			}
+		}
+	}
+	
+	private void generateChest() {
 		
 		// Create Locks and Buttons
 		for ( int i = 0 ; i < lockNumber ; i++) {
@@ -53,6 +98,7 @@ public class ChestGenerator extends JPanel{
 			if(buttonData.isLocked()) button.toggle();
 			listButton.add(button);
 		}
+		saveState();
 		// Adding ActionListener
 		for ( int i = 0 ; i < lockNumber ; i++) {
 			ButtonData buttonData = new ButtonData((JSONObject) objJSONArray.get(i));
@@ -60,6 +106,8 @@ public class ChestGenerator extends JPanel{
 				
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
+					saveState();
+					currentState++;
 					for ( int j = 0 ; j < buttonData.getLinkedLock().size() ; j++) {
 						final int index = j;
 						//System.out.println("Changing number "+ index);
