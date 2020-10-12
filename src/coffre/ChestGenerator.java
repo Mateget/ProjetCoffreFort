@@ -90,7 +90,7 @@ public class ChestGenerator extends JPanel{
     }
 	
 	private void clicHandle() {
-		System.out.println(Integer.toString(Integer.parseInt(clicCounter.getText())+1));
+		//System.out.println(Integer.toString(Integer.parseInt(clicCounter.getText())+1));
 		clicCounter.setText(Integer.toString(Integer.parseInt(clicCounter.getText())+1));
 	}
 	

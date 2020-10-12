@@ -45,7 +45,7 @@ public class ListOfChestPanel extends JPanel {
 	
 	private void initGame(JSONObject objChest) {
 		ChestGenerator chest = new ChestGenerator((JSONArray) objChest.get("buttons"));
-		System.out.println("INIT game"+objChest.get("name"));
+		//System.out.println("INIT game"+objChest.get("name"));
 		JPanel pan = new JPanel();
 		pan.setLayout(new GridLayout(2,1));
 		pan.setName("test");
@@ -66,7 +66,7 @@ public class ListOfChestPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Reset game"+objChest.get("name"));
+				//System.out.println("Reset game"+objChest.get("name"));
 				initGame(objChest);
 				
 			}
