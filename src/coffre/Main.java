@@ -1,6 +1,4 @@
-package coffrefort;
-
-
+package coffre;
 
 public class Main {
 

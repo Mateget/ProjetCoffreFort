@@ -1,0 +1,3 @@
+Copyright © 2020 by Matthieu Gethen
+
+Game name : Projet Coffre Fort

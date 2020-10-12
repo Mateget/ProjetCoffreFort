@@ -1,7 +1,7 @@
 {
 	"chests": [
 		{
-			"name": "Demo1",
+			"name": "Coffre Demo 1",
 			"buttons": [
 				{
 					"locked" : true,
@@ -19,7 +19,7 @@
 
 		},
 		{
-			"name": "Demo2",
+			"name": "Coffre Demo 2",
 			"buttons": [
 				{
 					"locked" : false,
@@ -49,7 +49,7 @@
 
 		},
 		{
-			"name": "Test1",
+			"name": "Coffre Test 1",
 			"buttons": [
 				{
 					"locked" : true,
