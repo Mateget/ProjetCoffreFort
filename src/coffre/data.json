@@ -1,5 +1,6 @@
+	
 {
-   "chests":[
+	"chests":[
    	  {
       	 "name":"Coffre Demo 1",
          "buttons":[
@@ -170,5 +171,5 @@
          ]
         
       }
-   ]
+	]
 }

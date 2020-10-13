@@ -54,7 +54,7 @@ public class ListOfChestPanel extends JPanel {
 	}
 	
 	private void initGame(JSONObject objChest) {
-		ChestGenerator chest = new ChestGenerator((JSONArray) objChest.get("buttons"),(String) objChest.get("name"),true);
+		ChestGenerator chest = new ChestGenerator((JSONArray) objChest.get("buttons"),(String) objChest.get("name"));
 		//System.out.println("INIT game"+objChest.get("name"));
 		JPanel pan = new JPanel();
 		pan.setLayout(new GridLayout(2,1));

@@ -32,8 +32,7 @@ public class ChestGenerator extends JPanel{
 	private int currentState = -1;
 	private ArrayList<GameState> history = new ArrayList<GameState>();
 	private String chestName;
-	private JButton save;
-	public ChestGenerator(JSONArray objJSONArray,String chestName,boolean fromSave) {
+	public ChestGenerator(JSONArray objJSONArray,String chestName) {
 		this.chestName = chestName;
 		this.objJSONArray = objJSONArray;
 		this.lockNumber = this.objJSONArray.size();
@@ -49,58 +48,13 @@ public class ChestGenerator extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				loadSave(currentState);
-				save();
-				
-			}
-		});
-		save = new JButton("Save");
-				save.addActionListener(new ActionListener() {
-			
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				saveState();
-				
-				save();
 				
 			}
 		});
 		gameInfo.add(undo);
-		gameInfo.add(save);
 		generateChest();
 		timer();
-		/*if(fromSave) {
-			currentState = history.size()-1;
-			loadSave(currentState);
-		}*/
 	}
-	
-	@SuppressWarnings("unchecked")
-	private void save() {
-		//currentState++;
-		JSONObject objSave = new JSONObject();
-		objSave.put(chestName, history);
-		JSONReadFromFile saveFile = new JSONReadFromFile("./src/coffre/save.json");
-		JSONObject objSaveFile = saveFile.getJsonObject();
-		
-		JSONArray savedChests = (JSONArray)objSaveFile.get("saves");
-		if (savedChests.isEmpty()) savedChests.add(objSave);
-		boolean present = false;
-		for ( int i = 0 ; i < savedChests.size() ; i++) {
-			JSONObject obj = (JSONObject)savedChests.get(i);
-			System.out.println("IF " +obj +" containt: " + chestName);
-			if(obj.containsKey(chestName)) {
-				savedChests.remove(i);
-				savedChests.add(objSave);
-				present = true;
-			}
-		}
-		if(!present) savedChests.add(objSave);
-		objSaveFile.put("saves", savedChests);
-		System.out.println("Actual history : " + history);
-		System.out.println("Saved file :" + objSaveFile);
-		new JSONWriteFromFile("./src/coffre/save.json", objSaveFile);
-	}
-	
 	private void saveState() {
 		ArrayList<Boolean> list = new ArrayList<Boolean>(); 
 		for ( int i = 0 ; i < listLock.size() ; i ++) {
