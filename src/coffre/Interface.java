@@ -31,15 +31,15 @@ public class Interface extends JFrame {
 		getContentPane().removeAll();
 		JSONArray chestslist = (JSONArray) new JSONReadFromFile(filePath).getJsonObject().get("chests");
 		
-		ListOfChestPanel chestlistPanel = new ListOfChestPanel(chestslist,menuButton());
+		ListOfChestPanel chestlistPanel = new ListOfChestPanel(chestslist,menuButton("Menu"));
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(chestlistPanel, BorderLayout.CENTER);
 		repaint();
 		revalidate();
 	}
 	
-	private JButton menuButton() {
-		JButton menuButton = new JButton("Menu");
+	private JButton menuButton(String name) {
+		JButton menuButton = new JButton(name);
 		menuButton.addActionListener(new ActionListener() {
 			
 			@Override

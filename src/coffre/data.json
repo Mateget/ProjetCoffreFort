@@ -143,6 +143,32 @@
             }
          ],
          
+      },
+      {
+      	 "name":"Coffre Test 3",
+         "buttons":[
+            {
+               "locked":true,
+               "linked":[
+                  1,
+                  2
+               ]
+            },
+            {
+               "locked":true,
+               "linked":[
+                  2
+               ]
+            },
+            {
+               "locked":true,
+               "linked":[
+                  1,
+                  3
+               ]
+            }
+         ]
+        
       }
    ]
 }

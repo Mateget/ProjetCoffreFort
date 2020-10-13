@@ -32,7 +32,8 @@ public class ChestGenerator extends JPanel{
 	private int currentState = -1;
 	private ArrayList<GameState> history = new ArrayList<GameState>();
 	private String chestName;
-	public ChestGenerator(JSONArray objJSONArray,String chestName) {
+	private JButton save;
+	public ChestGenerator(JSONArray objJSONArray,String chestName,boolean fromSave) {
 		this.chestName = chestName;
 		this.objJSONArray = objJSONArray;
 		this.lockNumber = this.objJSONArray.size();
@@ -48,12 +49,56 @@ public class ChestGenerator extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				loadSave(currentState);
+				save();
+				
+			}
+		});
+		save = new JButton("Save");
+				save.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				saveState();
+				
+				save();
 				
 			}
 		});
 		gameInfo.add(undo);
+		gameInfo.add(save);
 		generateChest();
 		timer();
+		/*if(fromSave) {
+			currentState = history.size()-1;
+			loadSave(currentState);
+		}*/
+	}
+	
+	@SuppressWarnings("unchecked")
+	private void save() {
+		//currentState++;
+		JSONObject objSave = new JSONObject();
+		objSave.put(chestName, history);
+		JSONReadFromFile saveFile = new JSONReadFromFile("./src/coffre/save.json");
+		JSONObject objSaveFile = saveFile.getJsonObject();
+		
+		JSONArray savedChests = (JSONArray)objSaveFile.get("saves");
+		if (savedChests.isEmpty()) savedChests.add(objSave);
+		boolean present = false;
+		for ( int i = 0 ; i < savedChests.size() ; i++) {
+			JSONObject obj = (JSONObject)savedChests.get(i);
+			System.out.println("IF " +obj +" containt: " + chestName);
+			if(obj.containsKey(chestName)) {
+				savedChests.remove(i);
+				savedChests.add(objSave);
+				present = true;
+			}
+		}
+		if(!present) savedChests.add(objSave);
+		objSaveFile.put("saves", savedChests);
+		System.out.println("Actual history : " + history);
+		System.out.println("Saved file :" + objSaveFile);
+		new JSONWriteFromFile("./src/coffre/save.json", objSaveFile);
 	}
 	
 	private void saveState() {
@@ -70,10 +115,12 @@ public class ChestGenerator extends JPanel{
 	private void loadSave(int saveValue) {
 		System.out.println("CurrentState : "+currentState);
 		if( currentState >= 0 ) {
+			
 			GameState state = history.get(currentState);
 			history.remove(currentState);
-			System.out.println(history);
 			currentState--;
+			System.out.println(history);
+			
 			System.out.println("Load :" +state);
 			for ( int i = 0 ; i < lockNumber ; i++) {
 				if(state.get(i)) {
@@ -107,8 +154,8 @@ public class ChestGenerator extends JPanel{
 				
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
-					saveState();
 					currentState++;
+					saveState();
 					for ( int j = 0 ; j < buttonData.getLinkedLock().size() ; j++) {
 						final int index = j;
 						//System.out.println("Changing number "+ index);
@@ -203,7 +250,15 @@ public class ChestGenerator extends JPanel{
 			JSONReadFromFile saveFile = new JSONReadFromFile("./src/coffre/save.json");
 			JSONObject objSaveFile = saveFile.getJsonObject();
 			JSONArray completedChest = (JSONArray)objSaveFile.get("completed");
-			completedChest.add(chestName);
+			boolean present = false;
+			for ( int i = 0 ; i < completedChest.size() ; i++) {
+				//System.out.println("IF : "+listOfCompletedChest.get(j).toString() + "==" + objChest.get("name"));
+				if(completedChest.get(i).toString().equals(chestName)) {
+					present = true;
+				} 
+			}
+			if(!present) completedChest.add(chestName);
+			
 			objSaveFile.replace("completed", completedChest);
 			new JSONWriteFromFile("./src/coffre/save.json", objSaveFile);
 			game.removeAll();
