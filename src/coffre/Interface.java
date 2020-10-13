@@ -18,7 +18,6 @@ public class Interface extends JFrame {
 	public Interface(String name) {
 		super(name);
 		filePath = new String("src/coffre/data.json");
-		this.hey = new JSONReadFromFile(filePath);
 		
 		//ArrayList<ChestGenerator> chestPanelList = chestlistPanel.getChestPanelList();
 		
@@ -30,7 +29,7 @@ public class Interface extends JFrame {
 	
 	private void setMenu() {
 		getContentPane().removeAll();
-		JSONArray chestslist = (JSONArray) hey.getJsonObject().get("chests");
+		JSONArray chestslist = (JSONArray) new JSONReadFromFile(filePath).getJsonObject().get("chests");
 		
 		ListOfChestPanel chestlistPanel = new ListOfChestPanel(chestslist,menuButton());
 		getContentPane().setLayout(new BorderLayout());

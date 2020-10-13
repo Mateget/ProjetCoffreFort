@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.json.simple.JSONArray;
@@ -31,7 +32,16 @@ public class ListOfChestPanel extends JPanel {
 			JSONObject objChest = (JSONObject) chestslist.get(i);
 			//ChestGenerator chest = new ChestGenerator((JSONArray) objChest.get("buttons"));
 			String chestName = (String) objChest.get("name");
-			JButton button = new JButton(chestName);						
+			JButton button = new JButton(chestName);
+			JSONReadFromFile saveFile = new JSONReadFromFile("./src/coffre/save.json");
+			JSONArray listOfCompletedChest = (JSONArray) saveFile.getJsonObject().get("completed");
+			for ( int j = 0 ; j < listOfCompletedChest.size() ; j++) {
+				//System.out.println("IF : "+listOfCompletedChest.get(j).toString() + "==" + objChest.get("name"));
+				if(listOfCompletedChest.get(j).toString().equals(chestName)) {
+					button.setText("<Html>"+chestName+"<br>"+"Already Done</Html>");
+				}
+			}
+			
 			button.addActionListener(new ActionListener() {
 				
 				@Override
@@ -44,7 +54,7 @@ public class ListOfChestPanel extends JPanel {
 	}
 	
 	private void initGame(JSONObject objChest) {
-		ChestGenerator chest = new ChestGenerator((JSONArray) objChest.get("buttons"));
+		ChestGenerator chest = new ChestGenerator((JSONArray) objChest.get("buttons"),(String) objChest.get("name"));
 		//System.out.println("INIT game"+objChest.get("name"));
 		JPanel pan = new JPanel();
 		pan.setLayout(new GridLayout(2,1));

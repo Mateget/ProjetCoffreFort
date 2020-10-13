@@ -1,91 +1,148 @@
 {
-	"chests": [
-		{
-			"name": "Coffre Demo 1",
-			"buttons": [
-				{
-					"locked" : true,
-					"linked" : [1,2]
-				},
-				{
-					"locked" : false,
-					"linked" : [1,2,3]
-				},
-				{
-					"locked" : true,
-					"linked" : [2,3]
-				}
-			]
-
-		},
-		{
-			"name": "Coffre Demo 2",
-			"buttons": [
-				{
-					"locked" : false,
-					"linked" : [1,2,5]
-				},
-				{
-					"locked" : false,
-					"linked" : [2,4,5]
-				},
-				{
-					"locked" : false,
-					"linked" : [1,3,6]
-				},
-				{
-					"locked" : true,
-					"linked" : [2,4]
-				},
-				{
-					"locked" : false,
-					"linked" : [1,2,3,5]
-				},
-				{
-					"locked" : false,
-					"linked" : [1,3,4,5,6]
-				}
-			]
-
-		},
-		{
-			"name": "Coffre Test 1",
-			"buttons": [
-				{
-					"locked" : true,
-					"linked" : [1,2]
-				},
-				{
-					"locked" : true,
-					"linked" : [1,2,3]
-				},
-				{
-					"locked" : true,
-					"linked" : [2,3,5]
-				},
-				{
-					"locked" : true,
-					"linked" : [4,5]
-				},
-				{
-					"locked" : true,
-					"linked" : [1,3,5]
-				}
-			]
-
-		}{
-			"name": "Coffre Test 2",
-			"buttons": [
-				{
-					"locked" : true,
-					"linked" : [1,2]
-				},
-				{
-					"locked" : true,
-					"linked" : [2]
-				}
-			]
-
-		},
-	]
+   "chests":[
+   	  {
+      	 "name":"Coffre Demo 1",
+         "buttons":[
+            {
+               "locked":true,
+               "linked":[
+                  1,
+                  2
+               ]
+            },
+            {
+               "locked":false,
+               "linked":[
+                  1,
+                  2,
+                  3
+               ]
+            },
+            {
+               "locked":true,
+               "linked":[
+                  2,
+                  3
+               ]
+            }
+         ]
+      },
+      {
+         "name":"Coffre Demo 2",
+         "buttons":[
+            {
+               "locked":false,
+               "linked":[
+                  1,
+                  2,
+                  5
+               ]
+            },
+            {
+               "locked":false,
+               "linked":[
+                  2,
+                  4,
+                  5
+               ]
+            },
+            {
+               "locked":false,
+               "linked":[
+                  1,
+                  3,
+                  6
+               ]
+            },
+            {
+               "locked":true,
+               "linked":[
+                  2,
+                  4
+               ]
+            },
+            {
+               "locked":false,
+               "linked":[
+                  1,
+                  2,
+                  3,
+                  5
+               ]
+            },
+            {
+               "locked":false,
+               "linked":[
+                  1,
+                  3,
+                  4,
+                  5,
+                  6
+               ]
+            }
+         ]
+      },
+      {
+      	 "name":"Coffre Test 1",
+         "buttons":[
+            {
+               "locked":true,
+               "linked":[
+                  1,
+                  2
+               ]
+            },
+            {
+               "locked":true,
+               "linked":[
+                  1,
+                  2,
+                  3
+               ]
+            },
+            {
+               "locked":true,
+               "linked":[
+                  2,
+                  3,
+                  5
+               ]
+            },
+            {
+               "locked":true,
+               "linked":[
+                  4,
+                  5
+               ]
+            },
+            {
+               "locked":true,
+               "linked":[
+                  1,
+                  3,
+                  5
+               ]
+            }
+         ]
+      },
+      {
+      	 "name":"Coffre Test 2",
+         "buttons":[
+            {
+               "locked":true,
+               "linked":[
+                  1,
+                  2
+               ]
+            },
+            {
+               "locked":true,
+               "linked":[
+                  2
+               ]
+            }
+         ],
+         
+      }
+   ]
 }

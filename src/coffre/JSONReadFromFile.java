@@ -12,7 +12,7 @@ public class JSONReadFromFile {
 	public JSONReadFromFile(String filePath) {
 		JSONParser parser = new JSONParser();
 		try {
-			System.out.println("Path : "+new File("").getAbsolutePath());
+			//System.out.println("Path : "+new File("").getAbsolutePath());
 			
 			Object obj = parser.parse(new FileReader(filePath));
  

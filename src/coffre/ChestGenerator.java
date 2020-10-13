@@ -29,9 +29,11 @@ public class ChestGenerator extends JPanel{
 	private JPanel gameInfo = new JPanel();
 	private JLabel clicCounter = new JLabel("0");
 	private JLabel temps = new JLabel("00:00");
-	private int currentState = 0;
+	private int currentState = -1;
 	private ArrayList<GameState> history = new ArrayList<GameState>();
-	public ChestGenerator(JSONArray objJSONArray) {
+	private String chestName;
+	public ChestGenerator(JSONArray objJSONArray,String chestName) {
+		this.chestName = chestName;
 		this.objJSONArray = objJSONArray;
 		this.lockNumber = this.objJSONArray.size();
 		game.setLayout(new GridLayout(2, lockNumber));
@@ -98,7 +100,6 @@ public class ChestGenerator extends JPanel{
 			if(buttonData.isLocked()) button.toggle();
 			listButton.add(button);
 		}
-		saveState();
 		// Adding ActionListener
 		for ( int i = 0 ; i < lockNumber ; i++) {
 			ButtonData buttonData = new ButtonData((JSONObject) objJSONArray.get(i));
@@ -199,6 +200,12 @@ public class ChestGenerator extends JPanel{
 				e.printStackTrace();
 			}
 			//System.out.println("Game WON !");
+			JSONReadFromFile saveFile = new JSONReadFromFile("./src/coffre/save.json");
+			JSONObject objSaveFile = saveFile.getJsonObject();
+			JSONArray completedChest = (JSONArray)objSaveFile.get("completed");
+			completedChest.add(chestName);
+			objSaveFile.replace("completed", completedChest);
+			new JSONWriteFromFile("./src/coffre/save.json", objSaveFile);
 			game.removeAll();
         	JLabel label = new JLabel("Coffre Ouvert !");
     		label.setFont(new Font("Serif", Font.PLAIN, 50));

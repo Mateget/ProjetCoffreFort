@@ -21,10 +21,10 @@ public class Button extends JButton{
 		}
 	}
 	
-	public boolean isPressed() {
+	public boolean isPressed () {
 		return this.pressed;
 	}
-	
+	 
 	public void press() {
 		this.pressed = true;
 		this.setEnabled(true);
