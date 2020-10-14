@@ -1,4 +1,4 @@
-package coffre;
+package projet;
 
 import javax.swing.JButton;
 

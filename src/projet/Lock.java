@@ -1,4 +1,4 @@
-package coffre;
+package projet;
 
 import java.awt.Color;
 

@@ -2,8 +2,9 @@
 {
 	"chests":[
    	  {
+   	  	 "difficulty":"Facile",
       	 "name":"Coffre Demo 1",
-         "buttons":[
+         "chest":[
             {
                "locked":true,
                "linked":[
@@ -29,8 +30,9 @@
          ]
       },
       {
+      	 "difficulty":"Facile",
          "name":"Coffre Demo 2",
-         "buttons":[
+         "chest":[
             {
                "locked":false,
                "linked":[
@@ -84,8 +86,9 @@
          ]
       },
       {
+      	 "difficulty":"Moyen",
       	 "name":"Coffre Test 1",
-         "buttons":[
+         "chest":[
             {
                "locked":true,
                "linked":[
@@ -127,8 +130,9 @@
          ]
       },
       {
+      	 "difficulty":"Moyen",
       	 "name":"Coffre Test 2",
-         "buttons":[
+         "chest":[
             {
                "locked":true,
                "linked":[
@@ -146,8 +150,9 @@
          
       },
       {
+       	 "difficulty":"Difficile",
       	 "name":"Coffre Test 3",
-         "buttons":[
+         "chest":[
             {
                "locked":true,
                "linked":[
