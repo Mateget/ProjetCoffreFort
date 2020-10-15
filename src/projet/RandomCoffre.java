@@ -17,9 +17,9 @@ public class RandomCoffre {
 	public RandomCoffre() {
 		coffre = new JSONArray();
 		nbMinLock = 3;
-		nbMaxLock = 4;
+		nbMaxLock = 10;
 		nbMinInteractionButton = 2;
-		nbMaxInteractionButton = 3;
+		nbMaxInteractionButton = 5;
 		generate();
 	}
 	
