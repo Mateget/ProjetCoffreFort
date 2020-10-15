@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import javax.swing.JFrame;
 
+import org.json.simple.JSONArray;
+
 import utils.JSONData;
 import utils.JSONSave;
 import utils.Observer;
@@ -14,6 +16,7 @@ public class Interface extends JFrame implements Observer{
 	JSONData data;
 	JSONSave save;
 	private String currentGame;
+	private JSONArray chest;
 	private ArrayList<String> menuString = new ArrayList<String>();
 	public Interface() {
 		menuString.add("Menu");
@@ -24,12 +27,15 @@ public class Interface extends JFrame implements Observer{
 		initDifficultySelection();
 		setSize(800,400);
 		setVisible(true);
+		
 	}
 	
 	private void initDifficultySelection() {
 		//System.out.println("initDifficultySelection");
 		getContentPane().removeAll();
-		getContentPane().add(new MenuChoix(this,MenuChoix.HORIZONTAL,data.getDifficulty()));
+		ArrayList<String> difficulty = data.getDifficulty();
+		if(!difficulty.contains("Random")) difficulty.add("Random");
+		getContentPane().add(new MenuChoix(this,MenuChoix.HORIZONTAL,difficulty));
 		getContentPane().repaint();
 		getContentPane().revalidate();
 	}
@@ -51,16 +57,15 @@ public class Interface extends JFrame implements Observer{
 		getContentPane().revalidate();
 	}
 	
-	private void initChestGame() {
-		//System.out.println("initChestGame : " + currentGame);
+	private void initGame() {
 		getContentPane().removeAll();
 		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(new Coffre(this,data.getChest(currentGame)),BorderLayout.CENTER);
+		getContentPane().add(new Coffre(this,chest),BorderLayout.CENTER);
 		getContentPane().add(new MenuChoix(this, MenuChoix.VERTICAL, menuString),BorderLayout.EAST);
 		getContentPane().repaint();
 		getContentPane().revalidate();
 	}
-	
+		
 	@Override
 	public void update(Object o) {
 		// TODO Auto-generated method stub
@@ -68,15 +73,20 @@ public class Interface extends JFrame implements Observer{
 			String str = (String) o;
 			//System.out.println(str);
 			if (data.getDifficulty().contains(str)) {
-				initChestSelection(str);
+				if("Random".equals(str)) {
+					chest = new RandomCoffre().getCoffre();
+					initGame();
+				}
+				else initChestSelection(str);
 			}
 			if (data.getChestNames().contains(str)) {
 				currentGame = str;
-				initChestGame();
+				chest = data.getChest(currentGame);
+				initGame();
 			}
 			if (menuString.contains(str)) {
 				if("Menu".equals(str)) initDifficultySelection();
-				if("Recommencer".equals(str)) initChestGame();
+				if("Recommencer".equals(str)) initGame();
 			}
 			if("Finish".equals(str)) {
 				save.addChest(currentGame);
