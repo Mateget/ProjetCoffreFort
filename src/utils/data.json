@@ -151,26 +151,38 @@
       },
       {
        	 "difficulty":"Difficile",
-      	 "name":"Coffre Test 3",
+      	 "name":"Coffre Test Hard",
          "chest":[
             {
-               "locked":true,
+               "locked":false,
                "linked":[
                   1,
-                  2
+                  2,
+		  4,
                ]
             },
             {
-               "locked":true,
+               "locked":false,
                "linked":[
-                  2
-               ]
-            },
-            {
-               "locked":true,
-               "linked":[
-                  1,
+                  2,
+	          1,
                   3
+               ]
+            },
+            {
+               "locked":true,
+               "linked":[
+                  1,
+                  3,
+                  4
+               ]
+            },
+            {
+               "locked":false,
+               "linked":[
+                  2,
+                  3,
+                  4
                ]
             }
          ]

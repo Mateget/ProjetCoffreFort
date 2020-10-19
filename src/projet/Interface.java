@@ -10,6 +10,7 @@ import org.json.simple.JSONArray;
 import utils.JSONData;
 import utils.JSONSave;
 import utils.Observer;
+import utils.RandomCoffre;
 
 public class Interface extends JFrame implements Observer{
 	
@@ -58,6 +59,7 @@ public class Interface extends JFrame implements Observer{
 	}
 	
 	private void initGame() {
+		new RandomCoffre().resoudre(chest);
 		getContentPane().removeAll();
 		getContentPane().setLayout(new BorderLayout());
 		getContentPane().add(new Coffre(this,chest),BorderLayout.CENTER);
@@ -74,7 +76,9 @@ public class Interface extends JFrame implements Observer{
 			//System.out.println(str);
 			if (data.getDifficulty().contains(str)) {
 				if("Random".equals(str)) {
-					chest = new RandomCoffre().getCoffre();
+					RandomCoffre objRandom = new RandomCoffre();
+					chest = objRandom.getCoffre();
+					System.out.println(objRandom.getSolutions());
 					initGame();
 				}
 				else initChestSelection(str);
