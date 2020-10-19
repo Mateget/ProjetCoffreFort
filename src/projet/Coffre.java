@@ -34,9 +34,12 @@ public class Coffre extends JPanel{
 	private int currentState;
 	private ArrayList<GameState> history;
 	private Observer observer;
-	public Coffre(Observer o,JSONArray objJSONArray) {
+	ArrayList<Integer> path;
+	
+	public Coffre(Observer o,JSONArray objJSONArray,ArrayList<Integer> path) {
 		
 		this.objJSONArray = objJSONArray;
+		this.path = path;
 		listButton = new ArrayList<Button>();
 		listLock = new ArrayList<Lock>();
 		lockNumber = objJSONArray.size();
@@ -115,6 +118,26 @@ public class Coffre extends JPanel{
 			}
 		});
 		gameInfo.add(undo);
+		String pathString = new String();
+		for ( int i = 0 ; i  < path.size() ; i++) {
+			pathString += path.get(i).toString() + " ";
+		}
+		final JLabel pathLabel = new JLabel(pathString);
+		final JButton aide = new JButton("Solution");
+		aide.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// TODO Auto-generated method stub
+				gameInfo.remove(aide);
+				
+				gameInfo.add(pathLabel);
+				repaint();
+				revalidate();
+				
+			}
+		});
+		gameInfo.add(aide);
 	}
 	
 	private void addHistory() {
@@ -143,6 +166,7 @@ public class Coffre extends JPanel{
 			}
 		}
 	}	
+	
 	private void clicHandle() {
 		clicCounter.setText(Integer.toString(Integer.parseInt(clicCounter.getText())+1));
 	}

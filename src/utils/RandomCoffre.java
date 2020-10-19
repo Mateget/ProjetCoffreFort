@@ -17,29 +17,41 @@ public class RandomCoffre {
 	private int nbMinInteractionButton;
 	private int nbMaxInteractionButton;
 	private ArrayList<ArrayList<Integer>> solutions;
-	ArrayList<Thread> globalthreads;
+	ArrayList<Runnable> globalRunnables;
+	ArrayList<Runnable> testedRunnables;
+	int difficulty;
  	public RandomCoffre() {
- 		coffre = new JSONArray();
-		nbMinLock = 3;
-		nbMaxLock = 8;
-		nbMinInteractionButton = 2;
-		nbMaxInteractionButton = 5;
-		globalthreads = new ArrayList<Thread>();
+ 		globalRunnables = new ArrayList<Runnable>();
+		testedRunnables = new ArrayList<Runnable>();
 	}
-	
-	public JSONArray getCoffre() {
-		generate();
+ 	
+ 	private void initRandom() {
+ 		nbMinLock = 4;
+		nbMaxLock = 7;
+		nbMinInteractionButton = 2;
+		nbMaxInteractionButton = 7;
+		globalRunnables = new ArrayList<Runnable>();
+		testedRunnables = new ArrayList<Runnable>();
+ 		coffre = generate();
+		while(!resoudre(coffre,true)) {
+			coffre = generate();
+		};
+ 	}
+ 		
+	public JSONArray getCoffre(int difficulty) {
+		this.difficulty = difficulty;
+		initRandom();	
 		return this.coffre;
 	}
-	
+		
 	public ArrayList<ArrayList<Integer>> getSolutions() {
 		return solutions;
 	}
 
 	@SuppressWarnings("unchecked")
-	public void generate() {
-		System.out.println("Generate");
-		coffre = new JSONArray();
+	public JSONArray generate() {
+		//System.out.println("Generate");
+		JSONArray chest = new JSONArray();
 		int nbLock = (int) Math.round(( nbMinLock + Math.random() * (nbMaxLock - nbMinLock)));
 		//System.out.println("NbLock :" + nbLock);
 		final ArrayList<Boolean> etatActuel = new ArrayList<Boolean>();
@@ -47,9 +59,13 @@ public class RandomCoffre {
 			JSONObject jsonObject = new JSONObject();
 			JSONArray interactionList = new JSONArray();
 			int nbInteractionButton = (int) Math.round(( nbMinInteractionButton + Math.random() * (nbMaxInteractionButton - nbMinInteractionButton)));
+			if ( nbInteractionButton > nbLock ) {
+				nbInteractionButton = nbLock;
+			}
 			interactionList.add(i);
-			while(interactionList.size()<nbInteractionButton) {
+			while( interactionList.size() < nbInteractionButton) {
 				int value = (int)(1 + Math.round((Math.random()*(nbLock-1))));
+				//System.out.println("Value tested " + value + " actual list " + interactionList );
 				//System.out.println(interactionList + "contain : " + value + "? " + interactionList.contains(value));
 				if(!interactionList.contains(value)){
 					//System.out.println(value + "added to : " + interactionList );
@@ -67,17 +83,16 @@ public class RandomCoffre {
 				etatActuel.add(false);
 			}
 			jsonObject.put("linked", interactionList);
-			coffre.add(jsonObject);
+			
+			chest.add(jsonObject);
 			
 		}
-		if(!resoudre(coffre)) {
-			generate();
-		} else {
-			System.out.println("Solution : " + solutions.size() + " " + solutions);	
-		}
+		return chest;
+		
+		
 	}
 	
-	private void resolvable(final ArrayList<Boolean> etatActuel,ArrayList<Integer> path ,final ArrayList<ArrayList<Boolean>> dejaFait) {
+	private void resolvable(final ArrayList<Boolean> etatActuel,ArrayList<Integer> path ,final ArrayList<ArrayList<Boolean>> dejaFait, final boolean randomChest) {
 		//System.out.println(etatActuel + " " + path + " DejaFait : " + dejaFait);	
 		boolean unlocked = true;
 		for ( int i = 0 ; i < etatActuel.size() ; i++) {
@@ -86,9 +101,17 @@ public class RandomCoffre {
 			}
 		}
 		if(unlocked) {
-			if(solutions.contains(path)) System.out.println("DOUBLON !");
-			solutions.add(path);
+			if(randomChest) {
+				if(path.size() < difficulty) {
+				//System.out.println("Path to short");
+					initRandom();
+				} else if(solutions.size() > 50 ) {
+					//System.out.println("Too much solutions");
+					initRandom();
+				}
+			}
 			
+			solutions.add(path);			
 		} else {
 			for ( int i = 0 ; i < etatActuel.size() ; i++) {
 				if(etatActuel.get(i)) {
@@ -122,16 +145,16 @@ public class RandomCoffre {
 						//System.out.println(newState + " est présent dans " + dejaFait);
 					} else {
 						dejaFait.add(etatActuel);
-						globalthreads.add(new Thread(new Runnable() {
+						globalRunnables.add(new Runnable() {
 							
 							@Override
 							public void run() {
 								// TODO Auto-generated method stub
 								//System.out.println("PATH " + newpath);
-								System.out.println("Working");
-								resolvable(newState, newpath, dejaFait);
+								//System.out.println("Working");
+								resolvable(newState, newpath, dejaFait,randomChest);
 							}
-						}));	
+						});	
 					}	
 				}
 			}
@@ -139,31 +162,26 @@ public class RandomCoffre {
 		
 	}
 	
-	private void runThreads() {
+	private void runRunnables() {
+		//System.out.println("Working " + childCount);
 		boolean end = true;
-		ArrayList<Thread> threads = globalthreads;
-		globalthreads = new ArrayList<Thread>();
-		while(threads.size()!=0) {
-			for ( int i = threads.size()-1 ; i>=0 ; i--) {
-				Thread thread = threads.get(i);
-				thread.start();
-				try {
-					thread.join();
-				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				threads.remove(i);
+		testedRunnables = globalRunnables;
+		globalRunnables = new ArrayList<Runnable>();
+		while(testedRunnables.size()!=0) {
+			//System.out.println("Hey :" + testedRunnables.size());
+			for ( int i = testedRunnables.size()-1 ; i>=0 ; i--) {
+				if(testedRunnables.size()!=0) testedRunnables.get(i).run();
+				if(testedRunnables.size()!=0) testedRunnables.remove(i);
 			}
 			end = false;
 		}
 		if(!end) {
-			runThreads();
+			runRunnables();
 		}		
 	}
 	
-	public boolean resoudre(JSONArray chest) {
-		//System.out.println(chest);
+	public boolean resoudre(JSONArray chest, boolean randomChest) {
+		//System.out.println("Resoudre : " + chest);
 		coffre = chest;
 		solutions = new ArrayList<ArrayList<Integer>>();
 		final ArrayList<ArrayList<Boolean>> dejaFait = new ArrayList<ArrayList<Boolean>>();
@@ -173,17 +191,18 @@ public class RandomCoffre {
 			JSONObject obj = (JSONObject) chest.get(i);
 			etatActuel.add((boolean)obj.get("locked"));
 		}
-		resolvable(etatActuel,path,dejaFait);
-		runThreads();
+		resolvable(etatActuel,path,dejaFait,randomChest);
+		runRunnables();
 		/// Difficulte
 		/*for (int i = 0 ; i <solutions.size() ; i++) {
 			System.out.println(solutions.get(i));
-			if(solutions.get(i).size() < 6) {
+			if(solutions.get(i).size() < 8) {
+				System.out.println("Too Easy");
 				return false;
 			}
 		}*/
 		//System.out.println("Soluce " + solutions);
-		if(solutions.size()<1) {
+		if(solutions.size()<=1) {
 			return false;
 		}
 		return true;
