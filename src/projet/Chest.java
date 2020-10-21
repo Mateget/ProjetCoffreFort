@@ -1,9 +1,5 @@
 package projet;
 
-import utils.ButtonData;
-import utils.GameState;
-import utils.Observer;
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -12,17 +8,28 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Random;
+import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
-public class Coffre extends JPanel{
-	private JSONArray objJSONArray;
+import rename.ChestData;
+import rename.GameState;
+import rename.Path;
+import util.ButtonData;
+import util.Observer;
+import util.Solver;
+
+public class Chest extends JPanel {
+
+	private static final long serialVersionUID = 1L;
+	
+	private ChestData chestData;
 	private ArrayList<Button> listButton;
 	private ArrayList<Lock> listLock;
 	private int lockNumber;
@@ -30,28 +37,26 @@ public class Coffre extends JPanel{
 	private JPanel game;
 	private JPanel gameInfo;
 	private JLabel clicCounter;
-	private JLabel temps;
+	private JLabel time;
 	private int currentState;
 	private ArrayList<GameState> history;
 	private Observer observer;
-	ArrayList<Integer> path;
+	private Path path;
 	
-	public Coffre(Observer o,JSONArray objJSONArray,ArrayList<Integer> path) {
-		
-		this.objJSONArray = objJSONArray;
-		this.path = path;
+	
+	public Chest(Observer o,ChestData chestData) {
+		ArrayList<Path> solutions = new Solver().resolve(chestData,false);
+		//System.out.println(solutions.size()  + " " + solutions);
+		path = solutions.get(new Random().nextInt(solutions.size()));
+		this.chestData = chestData;
 		listButton = new ArrayList<Button>();
 		listLock = new ArrayList<Lock>();
-		lockNumber = objJSONArray.size();
+		lockNumber = chestData.size();
 		gameFinished = false;
 		game = new JPanel();
-		gameInfo = new JPanel();
-		clicCounter = new JLabel("0");
-		temps = new JLabel("");
 		currentState = -1;
 		history = new ArrayList<GameState>();
 		observer = o;
-		
 		setLayout(new BorderLayout());
 		initGame();
 		add(game,BorderLayout.CENTER);
@@ -64,7 +69,7 @@ public class Coffre extends JPanel{
 		game.setLayout(new GridLayout(2, lockNumber));
 		// Create Locks and Buttons
 		for ( int i = 0 ; i < lockNumber ; i++) {
-			ButtonData buttonData = new ButtonData((JSONObject) objJSONArray.get(i));
+			ButtonData buttonData = new ButtonData((JSONObject) chestData.get(i));
 			Lock lock = new Lock("Verrou"+ (i+1));
 			if(!buttonData.isLocked()) lock.toggle();
 			listLock.add(lock);
@@ -74,7 +79,7 @@ public class Coffre extends JPanel{
 		}
 		// Adding ActionListener
 		for ( int i = 0 ; i < lockNumber ; i++) {
-			final ButtonData buttonData = new ButtonData((JSONObject) objJSONArray.get(i));
+			final ButtonData buttonData = new ButtonData((JSONObject) chestData.get(i));
 			listButton.get(i).addActionListener(new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent arg0) {
@@ -103,11 +108,14 @@ public class Coffre extends JPanel{
     }
 	
 	private void initGameInfo() {
+		gameInfo = new JPanel();
+		clicCounter = new JLabel("0");
+		time = new JLabel("");
 		gameInfo.setLayout(new FlowLayout(FlowLayout.CENTER,10,10));
 		gameInfo.add(new JLabel("Nombre de Cliques : "));
 		gameInfo.add(clicCounter);
 		gameInfo.add(new JLabel("Temps : "));
-		gameInfo.add(temps);
+		gameInfo.add(time);
 		JButton undo = new JButton("Undo");
 		undo.addActionListener(new ActionListener() {
 			
@@ -142,7 +150,7 @@ public class Coffre extends JPanel{
 	
 	private void addHistory() {
 		currentState++;
-		ArrayList<Boolean> list = new ArrayList<Boolean>(); 
+		Vector<Boolean> list = new Vector<Boolean>(); 
 		for ( int i = 0 ; i < listLock.size() ; i ++) {
 			list.add(listLock.get(i).isLocked());
 		}
@@ -176,12 +184,12 @@ public class Coffre extends JPanel{
 		    public void run() {
 		        long start = System.currentTimeMillis();
 		        while (!gameFinished) {
-		            long time = System.currentTimeMillis() - start;
-		            final int seconds = (int) (time / 1000);
-		            final int mili = (int) (time / 100) % 10;
+		            long startTime = System.currentTimeMillis() - start;
+		            final int seconds = (int) (startTime / 1000);
+		            final int mili = (int) (startTime / 100) % 10;
 		            SwingUtilities.invokeLater(new Runnable() {
 		                 public void run() {
-		                	 temps.setText( "" + seconds +"."+ mili+ " sec");
+		                	 time.setText( "" + seconds +"."+ mili+ " sec");
 		                 }
 		            });
 		            try {

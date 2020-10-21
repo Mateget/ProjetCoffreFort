@@ -1,4 +1,4 @@
-package utils;
+package util;
 
 import java.util.ArrayList;
 
@@ -8,7 +8,6 @@ import org.json.simple.JSONObject;
 public class ButtonData {
 	private boolean locked;
 	private JSONArray jsonArray;
-	@SuppressWarnings("unchecked")
 	public ButtonData(JSONObject obj) {
 		this.locked = (boolean) obj.get("locked");
 		if(obj.get("linked")instanceof ArrayList<?>) {

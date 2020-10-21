@@ -1,4 +1,4 @@
-package utils;
+package util;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class JSONSave {
 	private ArrayList<String> completed;
 	private String filepath;
 	public JSONSave() {
-		this.filepath = "./src/utils/save.json";
+		this.filepath = "./src/util/save.json";
 		this.save = new JSONReadFromFile(filepath).getJsonObject();
 		initCompleted();
 	}
@@ -40,6 +40,7 @@ public class JSONSave {
 		return false;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void save() {
 		JSONArray list = new JSONArray();
 		for ( int i = 0 ; i < completed.size() ; i++) {

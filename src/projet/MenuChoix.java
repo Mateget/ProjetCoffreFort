@@ -4,19 +4,17 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.EnumMap;
-
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import utils.Observer;
-import utils.Subject;
-
-
+import util.Observer;
 
 public class MenuChoix extends JPanel {
-	public static int HORIZONTAL = 1;
-	public static int VERTICAL = 2;
+
+	private static final long serialVersionUID = 1L;
+	
+	static int HORIZONTAL = 1;
+	static int VERTICAL = 2;
 	private Observer observer;
 	public MenuChoix(Observer o,int value, ArrayList<String> list) {
 		this.observer = o;

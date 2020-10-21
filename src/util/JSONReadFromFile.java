@@ -1,6 +1,5 @@
-package utils;
+package util;
 
-import java.io.File;
 import java.io.FileReader;
 
 import org.json.simple.JSONObject;

@@ -5,7 +5,9 @@ import java.awt.Color;
 import javax.swing.JLabel;
 
 public class Lock extends JLabel {
+	
 	private static final long serialVersionUID = 1L;
+	
 	private boolean locked;
 	public Lock(String text) {
 		setText(text);

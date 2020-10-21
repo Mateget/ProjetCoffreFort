@@ -1,9 +1,11 @@
-package utils;
+package util;
 
 import java.util.ArrayList;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+
+import rename.ChestData;
 
 public class JSONData {
 
@@ -11,7 +13,7 @@ public class JSONData {
 	private JSONArray chestlist;
 	private ArrayList<String> difficulty;
 	public JSONData() {
-		String filepath = "./src/utils/data.json";
+		String filepath = "./src/util/data.json";
 		this.data = new JSONReadFromFile(filepath).getJsonObject();
 		this.chestlist = (JSONArray)data.get("chests");
 		initDifficulty();
@@ -32,12 +34,18 @@ public class JSONData {
 		return this.difficulty;
 	}
 	
-	public JSONArray getChest(String chestName) {
+	@SuppressWarnings("unchecked")
+	public ChestData getChest(String chestName) {
 		for ( int i = 0 ; i < chestlist.size() ; i++) {
 			JSONObject obj = (JSONObject)chestlist.get(i);
 			String name = (String) obj.get("name");
 			if(name.equals(chestName)) {
-				return (JSONArray)obj.get("chest");
+				JSONArray jsonArray = (JSONArray) obj.get("chest");
+				ChestData chestData = new ChestData();
+				for ( int j = 0 ; j < jsonArray.size() ; j++) {
+					chestData.add(jsonArray.get(j));
+				}
+				return chestData ;
 			}	
 		}
 		return null;
