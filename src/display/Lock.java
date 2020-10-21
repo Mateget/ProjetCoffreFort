@@ -1,4 +1,4 @@
-package projet;
+package display;
 
 import java.awt.Color;
 
