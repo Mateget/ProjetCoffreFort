@@ -2,8 +2,11 @@ package display;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,11 +52,13 @@ public class Chest extends JPanel {
 		//System.out.println(solutions.size()  + " " + solutions);
 		path = solutions.get(new Random().nextInt(solutions.size()));
 		this.chestData = chestData;
+		
 		listButton = new ArrayList<Button>();
 		listLock = new ArrayList<Lock>();
 		lockNumber = chestData.size();
 		gameFinished = false;
 		game = new JPanel();
+		game.setBackground(new Color(139,139,139));
 		currentState = -1;
 		history = new ArrayList<GameState>();
 		observer = o;
@@ -66,7 +71,7 @@ public class Chest extends JPanel {
 	}
 	
 	private void initGame() {
-		game.setLayout(new GridLayout(2, lockNumber));
+		game.setLayout(new GridBagLayout());
 		// Create Locks and Buttons
 		for ( int i = 0 ; i < lockNumber ; i++) {
 			ButtonData buttonData = new ButtonData((JSONObject) chestData.get(i));
@@ -97,13 +102,19 @@ public class Chest extends JPanel {
 				}
 			});			
 		}
+		GridBagConstraints c = new GridBagConstraints();
 		// Adding Locks to JPanel
+		c.fill = GridBagConstraints.HORIZONTAL;
+		c.gridy = 0;
 		for ( int i = 0 ; i < lockNumber ; i++ ) {
-			game.add(listLock.get(i));
+			c.gridx = i;
+			game.add(listLock.get(i),c);
 		}
+		c.gridy = 1;
 		// Adding Buttons to JPanel
 		for ( int i = 0 ; i < lockNumber ; i++ ) {
-			game.add(listButton.get(i));
+			c.gridx = i;
+			game.add(listButton.get(i),c);
 		}		
     }
 	
@@ -237,8 +248,10 @@ public class Chest extends JPanel {
 		}
 		game.removeAll();
     	JLabel label = new JLabel("Coffre Ouvert !");
-		label.setFont(new Font("Serif", Font.PLAIN, 50));
-		label.setForeground(Color.GREEN);
+    	label.setBackground(new Color(139,139,139));
+    	label.setOpaque(true);
+		label.setFont(new Font("Serif", Font.PLAIN, 90));
+		label.setForeground(new Color(0,255,0));
 		label.setHorizontalAlignment(label.getWidth()/2);
 		game.setLayout(new BorderLayout());
 		game.add(label,BorderLayout.CENTER); 

@@ -1,6 +1,7 @@
 package display;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.util.ArrayList;
 
 import javax.swing.JFrame;
@@ -23,13 +24,15 @@ public class Interface extends JFrame implements Observer {
 	private RandomChest randomCoffre;
 	public Interface() {
 		randomCoffre = new RandomChest();
+		this.setBackground(new Color(139,139,139));
 		menuString.add("Menu");
 		menuString.add("Recommencer");
 		this.data = new JSONData();
 		this.save = new JSONSave();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initDifficultySelection();
-		setSize(1000,400);	
+		setSize(1300,600);	
+		setResizable(false);
 	}
 	
 	private void initDifficultySelection() {
