@@ -1,18 +1,15 @@
 package display;
 
 import java.awt.Color;
-import java.io.File;
-import java.io.IOException;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioInputStream;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+
+/*
+ * JLabel as a lock with a picture
+ * Light green for unlocked
+ * Dark green for locked 
+ */
 
 public class Lock extends JLabel {
 	
@@ -20,16 +17,22 @@ public class Lock extends JLabel {
 	private ImageIcon lockOpen = new ImageIcon("./libs/lockOpen.png");
 	private ImageIcon lockClose = new ImageIcon("./libs/lockClose.png");
 	private boolean locked;
-	public Lock(String text) {
-		//setText(text);
-
-		
+	
+	/*
+	 * Constructor
+	 */
+	
+	public Lock() {
 		this.setOpaque(true);
 		this.setBackground(new Color(139,139,139));
 		setHorizontalAlignment(this.getWidth()/2);
 		this.locked = false;
 		toggle();
 	}
+	
+	/*
+	 * Change actual state
+	 */
 	
 	public void toggle() {	
 		if(locked) {
@@ -40,18 +43,30 @@ public class Lock extends JLabel {
 		}
 	}
 	
+	/*
+	 * Return state
+	 * Used to check if a game is finished
+	 */
+	
 	public boolean isLocked() {
 		return this.locked;
 	}
 	
+	/*
+	 * Lock the lock
+	 */
+	
 	public void lock() {
 		this.setIcon(lockClose);
-		setForeground(Color.RED);
 		this.locked = true;
 	}
+	
+	/*
+	 * Unlock the lock 
+	 */
+	
 	public void unlock() {
 		this.setIcon(lockOpen);
-		setForeground(Color.GREEN);
 		this.locked = false;
 	}
 

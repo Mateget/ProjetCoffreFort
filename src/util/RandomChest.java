@@ -8,6 +8,10 @@ import org.json.simple.JSONObject;
 import rename.ChestData;
 import rename.GameState;
 
+/*
+ * Random chest generator
+ */
+
 public class RandomChest {
 
 	private ArrayList<ChestData> coffre;
@@ -16,6 +20,11 @@ public class RandomChest {
 	private int nbMinInteractionButton;
 	private int nbMaxInteractionButton;
 	private Random randomValue;
+	
+	/*
+	 * Constructor, initialize parameters for chests generation
+	 */
+	
  	public RandomChest() {
  		coffre = new ArrayList<ChestData>();
  		randomValue = new Random();
@@ -28,21 +37,25 @@ public class RandomChest {
 		
  		Solver solver = new Solver();
  		boolean isEmpty = true;
+ 		// Game need at least one chest to open itself
 		while(isEmpty) {
-			//System.out.println("Looking for chest !");
 			coffre.remove(0);
 			coffre.add(generate());
 			isEmpty = solver.resolve(this.coffre.get(0),true).isEmpty();
 		};
-		// Creating 2 more chest in threads to avoid freeze when trying to create a new randomchest later
+		// Creating 3 more chest in threads to avoid freeze when trying to load new randomchest later
+		newChest();
 		newChest();
 		newChest();
 		
 		
 	}
  	
+ 	/*
+ 	 * Generate a chest
+ 	 */
+ 	
  	private void newChest() {
- 		//System.out.println("Find chest !");
  		new Thread(new Runnable() {
 			
 			@Override
@@ -52,12 +65,15 @@ public class RandomChest {
 				while(solver.resolve(chestData,true).isEmpty()) {
 					chestData = generate();
 				};
-				//System.out.println("Founded ! " + chestData );
 				coffre.add(chestData);
 			}
 		}).start();
  		
  	}
+ 	
+ 	/*
+ 	 * Return one random chest, remove it from the list, process to find an other chest in a Thread
+ 	 */
  	 		
 	public ChestData getCoffre() {
 		ChestData chestData = coffre.get(0);
@@ -66,40 +82,47 @@ public class RandomChest {
 		return chestData;
 	}
 		
+	/*
+	 * Generate chest with parameters
+	 */
+	
 	@SuppressWarnings("unchecked")
 	public ChestData generate() {
-		//System.out.println("Generate");
 		ChestData chest = new ChestData();
+		// Choose number of lock
 		int nbLock = nbMinLock + randomValue.nextInt(nbMaxLock - nbMinLock + 1);
 		final GameState etatActuel = new GameState();
 		for ( int i = 1 ; i <= nbLock ; i++ ) {
-			JSONObject objButton = new JSONObject();
+			JSONObject objChest = new JSONObject();
 			JSONArray linkedButton = new JSONArray();
+			// Choose number of lock linked to button
 			int nbInteractionButton = nbMinInteractionButton + randomValue.nextInt(nbMaxInteractionButton - nbMinInteractionButton + 1);
 			if ( nbInteractionButton > nbLock ) {
 				nbInteractionButton = nbLock;
 			}
 			linkedButton.add(i);
 			while( linkedButton.size() < nbInteractionButton) {
+				// Choose a linked lock
 				int value = 1 + randomValue.nextInt(nbLock);
 				if(!linkedButton.contains(value)){
 					linkedButton.add(value);
 				}
 			}
-			if ( randomValue.nextInt(2) == 1) {
-				objButton.put("locked", true);
-				etatActuel.add(true);
-			}
-			else {
-				objButton.put("locked", false);
+			// Choose default state of lock
+			if ( randomValue.nextInt(3) == 1) {
+				objChest.put("locked", false);
 				etatActuel.add(false);
 			}
-			objButton.put("linked", linkedButton);
+			else {
+				objChest.put("locked", true);
+				etatActuel.add(true);
+				
+			}
+			objChest.put("linked", linkedButton);
 			
-			chest.add(objButton);
+			chest.add(objChest);
 			
 		}
-		//System.out.println(chest);
 		return chest;
 		
 		

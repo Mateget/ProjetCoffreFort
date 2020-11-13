@@ -2,11 +2,8 @@ package display;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 
 import rename.ChestData;
@@ -14,6 +11,11 @@ import util.JSONData;
 import util.JSONSave;
 import util.Observer;
 import util.RandomChest;
+
+/*
+ * JFrame manage game components
+ * Implements Observer to get notify by components
+ */
 
 public class Interface extends JFrame implements Observer {
 	
@@ -25,35 +27,53 @@ public class Interface extends JFrame implements Observer {
 	private ChestData chest;
 	private ArrayList<String> menuString = new ArrayList<String>();
 	private RandomChest randomCoffre;
+	
+	/*
+	 * Constructor
+	 */
+	
 	public Interface() {
 		randomCoffre = new RandomChest();
 		this.setBackground(new Color(139,139,139));
 		menuString.add("Menu");
-		menuString.add("Recommencer");
+		menuString.add("Restart");
 		this.data = new JSONData();
 		this.save = new JSONSave();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initDifficultySelection();
-		setSize(1300,800);	
+		setSize(1400,800);	
 		setResizable(false);
 	}
+	
+	/*
+	 * Display game difficulty selection
+	 */
 	
 	private void initDifficultySelection() {
 		getContentPane().removeAll();
 		ArrayList<String> difficulty = data.getDifficulty();
 		
 		if(!difficulty.contains("Random")) difficulty.add("Random");
-		getContentPane().add(new MenuChoix(this,MenuChoix.HORIZONTAL,difficulty));
+		getContentPane().add(new MenuChoix(this,MenuChoix.HORIZONTALFULL,difficulty));
 		getContentPane().repaint();
 		getContentPane().revalidate();
 	}
+	
+	/*
+	 * Display chest selection
+	 */
+	
 	private void initChestSelection(String str) {
 		getContentPane().removeAll();
 		ArrayList<String> names = data.getChestNames(str);
-		getContentPane().add(new MenuChoix(this,MenuChoix.HORIZONTAL,names));
+		getContentPane().add(new MenuChoix(this,MenuChoix.HORIZONTALFULL,names));
 		getContentPane().repaint();
 		getContentPane().revalidate();
 	}
+	
+	/*
+	 * Initialize game
+	 */
 	
 	private void initGame() {
 		getContentPane().removeAll();
@@ -64,6 +84,10 @@ public class Interface extends JFrame implements Observer {
 		getContentPane().revalidate();
 	}
 			
+	/*
+	 * Update function Overrided from Observer
+	 * Manage screen with update recieved from others class
+	 */
 	
 	@Override
 	public void update(Object o) {
@@ -85,7 +109,7 @@ public class Interface extends JFrame implements Observer {
 			}
 			if (menuString.contains(str)) {
 				if("Menu".equals(str)) initDifficultySelection();
-				if("Recommencer".equals(str)) {
+				if("Restart".equals(str)) {
 					initGame();	
 				}
 			}

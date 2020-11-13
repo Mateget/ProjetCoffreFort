@@ -1,16 +1,13 @@
 package display;
 
 import java.awt.Color;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import javazoom.jl.decoder.JavaLayerException;
-import javazoom.jl.player.Player;
-
-
+/*
+ * JButton displayed with an image
+ */
 public class Button extends JButton {
 	
 	private static final long serialVersionUID = 1L;
@@ -18,42 +15,53 @@ public class Button extends JButton {
 	private boolean pressed;
 	private ImageIcon buttonUp = new ImageIcon("./libs/buttonUp.png");
 	private ImageIcon buttonDown = new ImageIcon("./libs/buttonDown.png");
-	public Button(String text) {
+	
+	/*
+	 * Constructor
+	 * Basic Java Button appearance is removed
+	 */
+	public Button() {
 		this.setBackground(new Color(139,139,139));
         setFocusPainted(false);
-        //setMargin(new Insets(0, 0, 0, 0));
         setContentAreaFilled(false);
         setBorderPainted(false);
         setOpaque(true);
-		//setText(text);
 		this.pressed = true;	
-			
+		// Image for clickable button
+		this.setIcon(buttonDown);
+		// Image for unclickable(disable) button
+		this.setDisabledIcon(buttonUp);
 		toggle();
 	}
+	
+	/*
+	 * Change actual state
+	 */
 		
 	public void toggle() {
-		System.out.println("Toggle");
 		if(pressed) {
 			unpress();
 		}
 		else {
 			press();
 		}
-	}
+	}	
 	
-	public boolean isPressed () {
-		return this.pressed;
-	}
+	/*
+	 * Press button
+	 */
 	 
 	public void press() {
 		this.pressed = true;
-		this.setIcon(buttonDown);
 		this.setEnabled(true);
 	}
+	
+	/*
+	 * Unpress button
+	 */
+	
 	public void unpress() {
 		this.pressed = false;
-		this.setIcon(buttonUp);
-		this.setDisabledIcon(buttonUp);
 		this.setEnabled(false);
 	}
 	

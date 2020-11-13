@@ -5,6 +5,10 @@ import java.io.IOException;
  
 import org.json.simple.JSONObject;
 
+/*
+ * Write JSON file
+ */
+
 public class JSONWriteFromFile {
     public JSONWriteFromFile(String filePath, JSONObject objJSON) {         
 

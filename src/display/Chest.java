@@ -1,6 +1,7 @@
 package display;
 
 import java.awt.BorderLayout;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -8,6 +9,7 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileInputStream;
@@ -22,7 +24,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
-
 import org.json.simple.JSONObject;
 
 import javazoom.jl.decoder.JavaLayerException;
@@ -33,6 +34,10 @@ import rename.Path;
 import util.ButtonData;
 import util.Observer;
 import util.Solver;
+
+/*
+ * JPanel used by Interface class
+ */
 
 public class Chest extends JPanel {
 
@@ -51,12 +56,17 @@ public class Chest extends JPanel {
 	private ArrayList<GameState> history;
 	private Observer observer;
 	private Path path;
-	private ImageIcon closeChest = new ImageIcon("./libs/CoffreFerme.png");
-	private ImageIcon openChest = new ImageIcon("./libs/CoffreOuvert.png");
+	private ImageIcon closeChest = new ImageIcon("./libs/chestClose.png");
+	private ImageIcon openChest = new ImageIcon("./libs/chestOpen.png");
 	
+	/* 
+	 * Constructor
+	 * @Param : Observer, ChestData
+	 * Observer used to notify Interface that a game is finished
+	 * ChestData contain all data to create a chest  
+	 */
 	public Chest(Observer o,ChestData chestData) {
 		ArrayList<Path> solutions = new Solver().resolve(chestData,false);
-		//System.out.println(solutions.size()  + " " + solutions);
 		path = solutions.get(new Random().nextInt(solutions.size()));
 		this.chestData = chestData;
 		listButton = new ArrayList<Button>();
@@ -65,7 +75,6 @@ public class Chest extends JPanel {
 		gameFinished = false;
 		game = new JPanel();
 		game.setOpaque(false);
-		//game.setBackground(new Color(139,139,139));
 		currentState = -1;
 		history = new ArrayList<GameState>();
 		observer = o;
@@ -77,6 +86,10 @@ public class Chest extends JPanel {
 		timer();
 	}
 	
+	/*
+	 * Paint background with a chest picture, it change when the game is won
+	 */
+	
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if(!gameFinished) {
@@ -87,7 +100,9 @@ public class Chest extends JPanel {
          
     }
 	
-	
+	/*
+	 * Initialize a game
+	 */
 	private void initGame() {
 		game.setLayout(new GridBagLayout());
 		Dimension dimGame = new Dimension(200, 300);
@@ -97,10 +112,10 @@ public class Chest extends JPanel {
 		// Create Locks and Buttons
 		for ( int i = 0 ; i < lockNumber ; i++) {
 			ButtonData buttonData = new ButtonData((JSONObject) chestData.get(i));
-			Lock lock = new Lock("Verrou"+ (i+1));
+			Lock lock = new Lock();
 			if(!buttonData.isLocked()) lock.toggle();
 			listLock.add(lock);
-			Button button = new Button("Boutton"+(i+1));
+			Button button = new Button();
 			if(buttonData.isLocked()) button.toggle();
 			listButton.add(button);
 		}
@@ -113,11 +128,8 @@ public class Chest extends JPanel {
 					addHistory();
 					for ( int j = 0 ; j < buttonData.getLinkedLock().size() ; j++) {
 						final int index = j;
-						//System.out.println("Changing number "+ index);
 						listButton.get(buttonData.getLinkedLock().get(index)-1).toggle();
-						//System.out.println(listButton.get(buttonData.getLinkedLock().get(index)-1).getText());
 						listLock.get(buttonData.getLinkedLock().get(index)-1).toggle();
-						//System.out.println(listLock.get(buttonData.getLinkedLock().get(index)-1).getText());	
 					}
 					clicHandle();
 					isFinished();
@@ -140,10 +152,13 @@ public class Chest extends JPanel {
 		}		
     }
 	
+	/*
+	 * Initiate a bar with game info like Clic number, timer, undo button, etc ...
+	 */
+	
 	private void initGameInfo() {
 		gameInfo = new JPanel();
 		gameInfo.setOpaque(false);
-		//gameInfo.setBackground(new Color(139,139,139));
 		JLabel labelClic = new JLabel("Nombre de Cliques : ");
 		labelClic.setForeground(Color.WHITE);
 		labelClic.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
@@ -160,11 +175,10 @@ public class Chest extends JPanel {
 		time = new JLabel("");
 		time.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
 		time.setForeground(Color.WHITE);
-		Dimension dimTime = new Dimension(60,38);
+		Dimension dimTime = new Dimension(80,38);
 		time.setMinimumSize(dimTime);
 		time.setSize(dimTime);
 		time.setPreferredSize(dimTime);
-		//time.setHorizontalAlignment(SwingConstants.RIGHT);
 		JLabel labelTimeUnit = new JLabel("sec");
 		labelTimeUnit.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
 		labelTimeUnit.setForeground(Color.WHITE);
@@ -175,14 +189,18 @@ public class Chest extends JPanel {
 		gameInfo.add(labelTime);
 		gameInfo.add(time);
 		gameInfo.add(labelTimeUnit);
-		JButton undo = new JButton("Undo");
-		undo.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
+		ImageIcon undoImage = new ImageIcon("./libs/buttonUndo.png");
+		Image resizedUndoImage = undoImage.getImage().getScaledInstance(38, 38,Image.SCALE_SMOOTH);
+		undoImage = new ImageIcon(resizedUndoImage);
+		JButton undo = new JButton(undoImage);
+		undo.setFocusPainted(false);
+		undo.setContentAreaFilled(false);
+		undo.setBorderPainted(false);
 		undo.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				loadHistory(currentState);
-				System.out.println(time.getSize());
+				if(!gameFinished) loadHistory(currentState);
 			}
 		});
 		gameInfo.add(undo);
@@ -193,23 +211,32 @@ public class Chest extends JPanel {
 		final JLabel labelPath = new JLabel(pathString);
 		labelPath.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
 		labelPath.setForeground(Color.WHITE);
-		final JButton help = new JButton("Solution");
-		help.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
+		ImageIcon solutionImage = new ImageIcon("./libs/buttonSolution.png");
+		Image resizedSolutionImage = solutionImage.getImage().getScaledInstance(127, 38,Image.SCALE_SMOOTH);
+		undoImage = new ImageIcon(resizedSolutionImage);
+		final JButton help = new JButton(undoImage);
+		help.setFocusPainted(false);
+		help.setContentAreaFilled(false);
+		help.setBorderPainted(false);
+		help.setToolTipText("Afficher une solution. Tricheur !");
 		help.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO Auto-generated method stub
-				gameInfo.remove(help);
-				
-				gameInfo.add(labelPath);
-				repaint();
-				revalidate();
-				
+				if(!gameFinished) {
+					gameInfo.remove(help);
+					gameInfo.add(labelPath);
+					repaint();
+					revalidate();
+				}
 			}
 		});
 		gameInfo.add(help);
 	}
+	
+	/*
+	 * Save actual game state
+	 */
 	
 	private void addHistory() {
 		currentState++;
@@ -220,8 +247,15 @@ public class Chest extends JPanel {
 		history.add(new GameState(list));
 	}
 	
+	/*
+	 * Load game state
+	 * @Param : int
+	 * int index of game state to load
+	 */
+	
 	private void loadHistory(int saveValue) {
 		if( currentState >= 0 ) {
+			clicSound();
 			GameState state = history.get(currentState);
 			history.remove(currentState);
 			currentState--;
@@ -238,26 +272,18 @@ public class Chest extends JPanel {
 		}
 	}	
 	
+	/*
+	 * Handle actions when a button is used, play sound and change clic counter
+	 */
+	
 	private void clicHandle() {
-		Thread thread = new Thread(){
-		    public void run(){
-		    	try { // récupérer le son
-		    		Player playMP3 = new Player(new FileInputStream("./libs/buttonSong.mp3"));
-					playMP3.play();
-				}
-				catch (JavaLayerException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-		    }
-		  };
-		  thread.start();
+		clicSound();
 		clicCounter.setText(Integer.toString(Integer.parseInt(clicCounter.getText())+1));
 	}
 	
+	/*
+	 * Manage timer
+	 */
 	private void timer() {
 		new Thread(new Runnable() {
 		    public void run() {
@@ -281,6 +307,11 @@ public class Chest extends JPanel {
 		}).start();
 	}
 	
+	/*
+	 * Check if the game is finished
+	 * 100 ms delay was added to make sure all lock as were correctly switched before checking
+	 */
+	
 	private void isFinished() {
 		Runnable myRunnable = new Runnable(){
 	        public void run(){
@@ -296,7 +327,6 @@ public class Chest extends JPanel {
 						finish();
 					}
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 	        }
@@ -305,6 +335,10 @@ public class Chest extends JPanel {
 		thread.start();
 	}
 	
+	/*
+	 * Executed when a game is won
+	 */
+	
 	private void finish() {
 		playWinSong();
 		gameFinished = true; //Stop the timer
@@ -312,25 +346,47 @@ public class Chest extends JPanel {
 		try {
 			Thread.sleep(200);
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		this.repaint();
 		this.revalidate();
 	}
 	
+	/*
+	 * Play win song
+	 */
+	
 	private void playWinSong() {
 		Thread thread = new Thread(){
 		    public void run(){
-		    	try { // récupérer le son
+		    	try {
 		    		Player playMP3 = new Player(new FileInputStream("./libs/victoryCrew.mp3"));
 					playMP3.play();
 				}
 				catch (JavaLayerException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (FileNotFoundException e) {
-					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
+		  };
+		  thread.start();
+	}
+	
+	/*
+	 * Play button switch song
+	 */
+	
+	private void clicSound() {
+		Thread thread = new Thread(){
+		    public void run(){
+		    	try {
+		    		Player playMP3 = new Player(new FileInputStream("./libs/buttonSong.mp3"));
+					playMP3.play();
+				}
+				catch (JavaLayerException e) {
+					e.printStackTrace();
+				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
 		    }

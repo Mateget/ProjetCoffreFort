@@ -1,5 +1,9 @@
 package util;
 
+/*
+ * Subject interface
+ */
+
 public interface Subject {
 	void ajouter(Observer o);
 

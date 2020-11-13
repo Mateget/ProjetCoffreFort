@@ -2,8 +2,8 @@
 {
 	"chests":[
    	  {
-   	  	 "difficulty":"Facile",
-      	 "name":"Coffre Demo 1",
+   	  	 "difficulty":"Easy",
+      	 "name":"Demo 1",
          "chest":[
             {
                "locked":true,
@@ -30,8 +30,8 @@
          ]
       },
       {
-      	 "difficulty":"Facile",
-         "name":"Coffre Demo 2",
+      	 "difficulty":"Easy",
+         "name":"Demo 2",
          "chest":[
             {
                "locked":false,
@@ -86,8 +86,8 @@
          ]
       },
       {
-      	 "difficulty":"Moyen",
-      	 "name":"Coffre Test 1",
+      	 "difficulty":"Medium",
+      	 "name":"Medium 1",
          "chest":[
             {
                "locked":true,
@@ -130,28 +130,25 @@
          ]
       },
       {
-      	 "difficulty":"Moyen",
-      	 "name":"Coffre Test 2",
-         "chest":[
-            {
-               "locked":true,
-               "linked":[
-                  1,
-                  2
-               ]
-            },
-            {
-               "locked":true,
-               "linked":[
-                  2
-               ]
-            }
-         ],
-         
-      },
+      	 "difficulty":"Medium",
+      	 "name":"Medium 2",
+         "chest":[{"locked":false,"linked":[1,7,6,5,2]},{"locked":false,"linked":[2,6,1,3]},{"locked":true,"linked":[3,4,2,5]},{"locked":false,"linked":[4,5,7,3]},{"locked":true,"linked":[5,2,3,6]},{"locked":false,"linked":[6,3,5]},{"locked":false,"linked":[7,3,2,1,4]}]
+        },
+	{
+		"difficulty":"Hard",
+		"name":"Hard 1",
+		"chest":[{"locked":true,"linked":[1,6,3,4]},{"locked":false,"linked":[2,6]},{"locked":true,"linked":[3,4,5,1]},{"locked":true,"linked":[4,2,1,3,6]},{"locked":true,"linked":[5,3,2,4]},{"locked":true,"linked":[6,2,4]}]
+	},
+	{
+		"difficulty":"Hard",
+		"name":"Hard 2",
+		"chest":[{"locked":true,"linked":[1,5,4,6,2]},{"locked":true,"linked":[2,1,4,5,3]},{"locked":true,"linked":[3,4,6,2,5]},{"locked":true,"linked":[4,1]},{"locked":true,"linked":[5,2,1,3]},{"locked":true,"linked":[6,2]}]
+	},
+
+
       {
-       	 "difficulty":"Difficile",
-      	 "name":"Coffre Test Hard",
+       	 "difficulty":"Medium",
+      	 "name":"Medium 3",
          "chest":[
             {
                "locked":false,
