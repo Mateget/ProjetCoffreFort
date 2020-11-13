@@ -2,8 +2,11 @@ package display;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JFrame;
 
 import rename.ChestData;
@@ -31,7 +34,7 @@ public class Interface extends JFrame implements Observer {
 		this.save = new JSONSave();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		initDifficultySelection();
-		setSize(1300,600);	
+		setSize(1300,800);	
 		setResizable(false);
 	}
 	
@@ -78,12 +81,12 @@ public class Interface extends JFrame implements Observer {
 			if (data.getChestNames().contains(str)) {
 				currentGame = str;
 				chest = data.getChest(currentGame);
-				initGame();
+				initGame();	
 			}
 			if (menuString.contains(str)) {
 				if("Menu".equals(str)) initDifficultySelection();
 				if("Recommencer".equals(str)) {
-					initGame();
+					initGame();	
 				}
 			}
 			if("Finish".equals(str)) {

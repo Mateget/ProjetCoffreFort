@@ -5,22 +5,28 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Vector;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 
 import org.json.simple.JSONObject;
 
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
 import rename.ChestData;
 import rename.GameState;
 import rename.Path;
@@ -45,33 +51,49 @@ public class Chest extends JPanel {
 	private ArrayList<GameState> history;
 	private Observer observer;
 	private Path path;
-	
+	private ImageIcon closeChest = new ImageIcon("./libs/CoffreFerme.png");
+	private ImageIcon openChest = new ImageIcon("./libs/CoffreOuvert.png");
 	
 	public Chest(Observer o,ChestData chestData) {
 		ArrayList<Path> solutions = new Solver().resolve(chestData,false);
 		//System.out.println(solutions.size()  + " " + solutions);
 		path = solutions.get(new Random().nextInt(solutions.size()));
 		this.chestData = chestData;
-		
 		listButton = new ArrayList<Button>();
 		listLock = new ArrayList<Lock>();
 		lockNumber = chestData.size();
 		gameFinished = false;
 		game = new JPanel();
-		game.setBackground(new Color(139,139,139));
+		game.setOpaque(false);
+		//game.setBackground(new Color(139,139,139));
 		currentState = -1;
 		history = new ArrayList<GameState>();
 		observer = o;
 		setLayout(new BorderLayout());
 		initGame();
-		add(game,BorderLayout.CENTER);
+		add(game,BorderLayout.SOUTH);
 		initGameInfo();
 		add(gameInfo,BorderLayout.NORTH);
 		timer();
 	}
 	
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if(!gameFinished) {
+        	g.drawImage(closeChest.getImage(),0,0,this.getWidth(),this.getHeight(),null); 
+        } else {
+        	g.drawImage(openChest.getImage(),0,0,this.getWidth(),this.getHeight(),null); 
+        }
+         
+    }
+	
+	
 	private void initGame() {
 		game.setLayout(new GridBagLayout());
+		Dimension dimGame = new Dimension(200, 300);
+		game.setSize(dimGame);
+		game.setMinimumSize(dimGame);
+		game.setPreferredSize(dimGame);
 		// Create Locks and Buttons
 		for ( int i = 0 ; i < lockNumber ; i++) {
 			ButtonData buttonData = new ButtonData((JSONObject) chestData.get(i));
@@ -120,20 +142,47 @@ public class Chest extends JPanel {
 	
 	private void initGameInfo() {
 		gameInfo = new JPanel();
+		gameInfo.setOpaque(false);
+		//gameInfo.setBackground(new Color(139,139,139));
+		JLabel labelClic = new JLabel("Nombre de Cliques : ");
+		labelClic.setForeground(Color.WHITE);
+		labelClic.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
 		clicCounter = new JLabel("0");
+		clicCounter.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
+		clicCounter.setForeground(Color.WHITE);
+		Dimension dimClicCounter = new Dimension(40,38);
+		clicCounter.setMinimumSize(dimClicCounter);
+		clicCounter.setSize(dimClicCounter);
+		clicCounter.setPreferredSize(dimClicCounter);
+		JLabel labelTime = new JLabel("Temps : ");
+		labelTime.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
+		labelTime.setForeground(Color.WHITE);
 		time = new JLabel("");
+		time.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
+		time.setForeground(Color.WHITE);
+		Dimension dimTime = new Dimension(60,38);
+		time.setMinimumSize(dimTime);
+		time.setSize(dimTime);
+		time.setPreferredSize(dimTime);
+		//time.setHorizontalAlignment(SwingConstants.RIGHT);
+		JLabel labelTimeUnit = new JLabel("sec");
+		labelTimeUnit.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
+		labelTimeUnit.setForeground(Color.WHITE);
+		labelTimeUnit.setHorizontalAlignment(SwingConstants.LEFT);
 		gameInfo.setLayout(new FlowLayout(FlowLayout.CENTER,10,10));
-		gameInfo.add(new JLabel("Nombre de Cliques : "));
+		gameInfo.add(labelClic);
 		gameInfo.add(clicCounter);
-		gameInfo.add(new JLabel("Temps : "));
+		gameInfo.add(labelTime);
 		gameInfo.add(time);
+		gameInfo.add(labelTimeUnit);
 		JButton undo = new JButton("Undo");
+		undo.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
 		undo.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				loadHistory(currentState);
-				
+				System.out.println(time.getSize());
 			}
 		});
 		gameInfo.add(undo);
@@ -141,22 +190,25 @@ public class Chest extends JPanel {
 		for ( int i = 0 ; i  < path.size() ; i++) {
 			pathString += path.get(i).toString() + " ";
 		}
-		final JLabel pathLabel = new JLabel(pathString);
-		final JButton aide = new JButton("Solution");
-		aide.addActionListener(new ActionListener() {
+		final JLabel labelPath = new JLabel(pathString);
+		labelPath.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
+		labelPath.setForeground(Color.WHITE);
+		final JButton help = new JButton("Solution");
+		help.setFont(new Font("Comic Sans MS", Font.PLAIN,30));
+		help.addActionListener(new ActionListener() {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				// TODO Auto-generated method stub
-				gameInfo.remove(aide);
+				gameInfo.remove(help);
 				
-				gameInfo.add(pathLabel);
+				gameInfo.add(labelPath);
 				repaint();
 				revalidate();
 				
 			}
 		});
-		gameInfo.add(aide);
+		gameInfo.add(help);
 	}
 	
 	private void addHistory() {
@@ -187,6 +239,22 @@ public class Chest extends JPanel {
 	}	
 	
 	private void clicHandle() {
+		Thread thread = new Thread(){
+		    public void run(){
+		    	try { // récupérer le son
+		    		Player playMP3 = new Player(new FileInputStream("./libs/buttonSong.mp3"));
+					playMP3.play();
+				}
+				catch (JavaLayerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
+		  };
+		  thread.start();
 		clicCounter.setText(Integer.toString(Integer.parseInt(clicCounter.getText())+1));
 	}
 	
@@ -200,7 +268,7 @@ public class Chest extends JPanel {
 		            final int mili = (int) (startTime / 100) % 10;
 		            SwingUtilities.invokeLater(new Runnable() {
 		                 public void run() {
-		                	 time.setText( "" + seconds +"."+ mili+ " sec");
+		                	time.setText( seconds + "." + mili );
 		                 }
 		            });
 		            try {
@@ -238,24 +306,35 @@ public class Chest extends JPanel {
 	}
 	
 	private void finish() {
+		playWinSong();
 		gameFinished = true; //Stop the timer
 		observer.update("Finish");
 		try {
-			Thread.sleep(1000);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		game.removeAll();
-    	JLabel label = new JLabel("Coffre Ouvert !");
-    	label.setBackground(new Color(139,139,139));
-    	label.setOpaque(true);
-		label.setFont(new Font("Serif", Font.PLAIN, 90));
-		label.setForeground(new Color(0,255,0));
-		label.setHorizontalAlignment(label.getWidth()/2);
-		game.setLayout(new BorderLayout());
-		game.add(label,BorderLayout.CENTER); 
-		game.repaint();
-		game.revalidate();
+		this.repaint();
+		this.revalidate();
+	}
+	
+	private void playWinSong() {
+		Thread thread = new Thread(){
+		    public void run(){
+		    	try { // récupérer le son
+		    		Player playMP3 = new Player(new FileInputStream("./libs/victoryCrew.mp3"));
+					playMP3.play();
+				}
+				catch (JavaLayerException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+		    }
+		  };
+		  thread.start();
 	}
 }

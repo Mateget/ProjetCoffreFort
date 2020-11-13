@@ -1,7 +1,16 @@
 package display;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.IOException;
 
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 
@@ -13,6 +22,8 @@ public class Lock extends JLabel {
 	private boolean locked;
 	public Lock(String text) {
 		//setText(text);
+
+		
 		this.setOpaque(true);
 		this.setBackground(new Color(139,139,139));
 		setHorizontalAlignment(this.getWidth()/2);
@@ -20,7 +31,7 @@ public class Lock extends JLabel {
 		toggle();
 	}
 	
-	public void toggle() {
+	public void toggle() {	
 		if(locked) {
 			unlock();
 		}

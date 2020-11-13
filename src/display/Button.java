@@ -1,15 +1,14 @@
 package display;
 
 import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+
+import javazoom.jl.decoder.JavaLayerException;
+import javazoom.jl.player.Player;
 
 
 public class Button extends JButton {
@@ -27,11 +26,13 @@ public class Button extends JButton {
         setBorderPainted(false);
         setOpaque(true);
 		//setText(text);
-		this.pressed = true;
+		this.pressed = true;	
+			
 		toggle();
 	}
 		
 	public void toggle() {
+		System.out.println("Toggle");
 		if(pressed) {
 			unpress();
 		}

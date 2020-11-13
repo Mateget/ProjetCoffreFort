@@ -24,11 +24,11 @@ public class Test extends JFrame{
 	
 	public Test() {
 		//this.setLocationRelativeTo(null);
-		ImageIcon coffrevide = new ImageIcon("./libs/CoffreVide.png");
-		ImageIcon lockOpen = new ImageIcon("./libs/lockOpen.png");
-		ImageIcon lockClose = new ImageIcon("./libs/lockClose.png");
-		ImageIcon buttonUp = new ImageIcon("./libs/buttonUp.png");
-		ImageIcon buttonDown = new ImageIcon("./libs/buttonDown.png");
+		ImageIcon coffrevide = new ImageIcon("./libs/CoffreFerme.png");
+		final ImageIcon lockOpen = new ImageIcon("./libs/lockOpen.png");
+		final ImageIcon lockClose = new ImageIcon("./libs/lockClose.png");
+		final ImageIcon buttonUp = new ImageIcon("./libs/buttonUp.png");
+		final ImageIcon buttonDown = new ImageIcon("./libs/buttonDown.png");
 		ImageIcon unlocked = new ImageIcon("./libs/unlocked.png");
 		JLabel image = new JLabel() {
 			 @Override
@@ -56,14 +56,14 @@ public class Test extends JFrame{
 
 	    middle.setBounds(150, 430, 690, 400);  
 	    middle.setLayout(new GridLayout(2,3));
-	    JLabel lock1 = new JLabel(lockOpen);
+	    final JLabel lock1 = new JLabel(lockOpen);
 	    middle.add(lock1);
-	    JLabel lock2 = new JLabel(lockOpen);
+	    final JLabel lock2 = new JLabel(lockOpen);
 	    middle.add(lock2);
-	    JLabel lock3 = new JLabel(lockOpen);
+	    final JLabel lock3 = new JLabel(lockOpen);
 	    middle.add(lock3);
 	    /// Button
-	    JLabel button1 = new JLabel(buttonUp);
+	    final JLabel button1 = new JLabel(buttonUp);
 	    button1.addMouseListener(new MouseAdapter() {
 	    	public void mousePressed(MouseEvent me) {
 	    		if(lock1.getIcon().equals(lockOpen)) {
@@ -77,7 +77,7 @@ public class Test extends JFrame{
 	    	}
 		});
 	    middle.add(button1);
-	    JLabel button2 = new JLabel(buttonUp);
+	    final JLabel button2 = new JLabel(buttonUp);
 	    button2.addMouseListener(new MouseAdapter() {
 	    	public void mousePressed(MouseEvent me) {
 	    		if(lock2.getIcon().equals(lockOpen)) {
@@ -91,7 +91,7 @@ public class Test extends JFrame{
 	    	}
 		});
 	    middle.add(button2);
-	    JLabel button3 = new JLabel(buttonUp);
+	    final JLabel button3 = new JLabel(buttonUp);
 	    button3.addMouseListener(new MouseAdapter() {
 	    	public void mousePressed(MouseEvent me) {
 	    		if(lock3.getIcon().equals(lockOpen)) {
